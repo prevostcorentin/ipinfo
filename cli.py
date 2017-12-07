@@ -2,7 +2,7 @@
 
 import click
 import ipinfo
-from ipinfo import IpAddress, NetworkConfiguration
+from ipinfo import IpAddress, Network
 
 @click.group()
 @click.version_option()
@@ -19,7 +19,7 @@ def machines(ip, mask):
     ip = IpAddress(ip)
     if not mask:
         mask = ip.mask
-    print NetworkConfiguration(ip).machines
+    print Network(ip).machines
 
 @click.command()
 @click.option('--ip', help='IP address')
