@@ -20,7 +20,14 @@ from src.network import Network
 @click.option('--binary/--no-binary',
               default=False,
               help='Display ip to binary format')
-def cli(ip_cidr, machines, mask, binary):
+@click.option('--subnetworks/--no-subnetworks',
+              default=True,
+              help='Display ip to binary format')
+@click.option('--parts/--no-parts',
+              default=True,
+              help='Display parts of ip address without mask')
+def cli(ip_cidr, machines, mask, 
+        binary, parts, subnetworks):
     """ Get ip adresses info
 
         Can deal with subnetworks
@@ -30,11 +37,16 @@ def cli(ip_cidr, machines, mask, binary):
     network = Network(ip, mask)
     print 'IP Address:', ip
     if mask:
-        print 'Mask:', ip.mask
+        print 'Mask: {}'.format(network.mask)
     if binary:
-        print 'Binary', ip.binary
+        print 'Binary: {}'.format(ip.binary)
+    if subnetworks:
+        print 'Number of subnetworks: {}'.format(network.subnetworks)
     if machines:
-        print 'Number of machines:', network.machines
+        print 'Number of machines: {}'.format(network.machines)
+    if parts:
+        print 'Machine part from mask {mask}: {part}'.format(mask=ip.mask,
+                                                             part=ip.machine_part)
 
 if __name__ == '__main__':
     cli()
