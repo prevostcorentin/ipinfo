@@ -3,7 +3,6 @@
 from util import dec2base
 
 
-# TODO: Intégrer calcul de sous-réseaux
 class IPAddress(object):
 
     def __init__(self, ip):
@@ -12,10 +11,7 @@ class IPAddress(object):
         self._ipclass = ''
 
     def __str__(self):
-        s = ''
-        for p in self._parts:
-            s += p+'.'
-        return s.rstrip('.')
+        return '.'.join(self._parts)
 
     def __iter__(self):
         for p in self._parts:
