@@ -1,32 +1,40 @@
 # coding: utf-8
 
 import click
-import ipinfo
-from ipinfo import IpAddress, Network
+import src as ipinfo
+import src.IPAddress
+from src.IPAddress import IPAddress
+import src.network
+from src.network import Network
 
-@click.group()
-@click.version_option()
-def cli():
+
+@click.command()
+@click.argument('ip_cidr', nargs=1,
+                required=True)
+@click.option('--machines/--no-machines', 
+              default=True,
+              help='Display number of machines')
+@click.option('--mask/--no-mask',
+              default=True,
+              help='Display mask')
+@click.option('--binary/--no-binary',
+              default=False,
+              help='Display ip to binary format')
+def cli(ip_cidr, machines, mask, binary):
     """ Get ip adresses info
 
         Can deal with subnetworks
     """
+    ip, mask = ip_cidr.split('/')
+    ip = IPAddress(ip)
+    network = Network(ip, mask)
+    print 'IP Address:', ip
+    if mask:
+        print 'Mask:', ip.mask
+    if binary:
+        print 'Binary', ip.binary
+    if machines:
+        print 'Number of machines:', network.machines
 
-@click.command()
-@click.option('--ip', help='IP address')
-@click.option('--mask', default=None, help='Subnetwork mask')
-def machines(ip, mask):
-    ip = IpAddress(ip)
-    if not mask:
-        mask = ip.mask
-    print Network(ip).machines
-
-@click.command()
-@click.option('--ip', help='IP address')
-def mask(ip):
-    print IpAdress(ip).mask
-
-@click.command()
-@click.option('--ip', help='IP address')
-def binary(ip):
-    print IpAdress(ip).binary
+if __name__ == '__main__':
+    cli()
