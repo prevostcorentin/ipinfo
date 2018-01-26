@@ -30,16 +30,29 @@ class IPAddress(object):
             return 24
 
     @property
+    def is_private(self):
+        if self.ipclass == 'A':
+            return self._parts[0] == '10'
+        elif self.ipclass == 'B':
+            if self._parts[0] == '172':
+                return int(self._parts[1]) > 15 and int(self._parts) < 32
+            return False
+        elif self.ipclass == 'C':
+            if self._parts[0] == '192' and self._parts[1] == '168':
+                return int(self._parts[2]) > 0 
+            return False
+
+    @property
     def ipclass(self):
         if self._ipclass:
             return self._ipclass
         first_byte = int(self._parts[0])
         if first_byte > 0:
-            if first_byte < 126:
+            if first_byte < 128:
                 return 'A'
             elif first_byte < 192:
                 return 'B'
-            elif first_byte < 223:
+            elif first_byte < 224:
                 return 'C'
         return None
 
