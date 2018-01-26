@@ -30,7 +30,7 @@ class Network(object):
                 addr.append(0)
                 for x in xrange(1, left_bytes+1):
                     addr[last_index] += pow(2, 8 - x)
-            while len(addr) < 3:
+            while len(addr) < 4:
                 addr.append(0)
             self._mask = '.'.join([str(p) for p in addr])
         return self._mask
